@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:dice_app/authentication/vm_authentication.dart';
-import 'package:dice_app/constants.dart';
-import 'package:dice_app/routes.dart';
+import 'package:dice_app/additionalFiles/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:package_info/package_info.dart';
+
+import 'additionalFiles/routes.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -88,7 +89,7 @@ class _ProfileState extends State<Profile> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(
+        title:const Text(
           'warning',
           style: TextStyle(
             color: Colors.amber,
@@ -96,13 +97,13 @@ class _ProfileState extends State<Profile> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        content: Text('Do you want to logout?'),
+        content: const Text('Do you want to logout?'),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context), child: Text('No')),
           TextButton(
             onPressed: _logout,
-            child: Text('Yes'),
+            child: const Text('Yes'),
           )
         ],
       ),

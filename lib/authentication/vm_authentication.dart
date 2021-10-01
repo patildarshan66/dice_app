@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dice_app/global_functions_variables.dart';
+import 'package:dice_app/additionalFiles/offline_data_manager.dart';
+import 'package:dice_app/additionalFiles/sharedPref.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../sharedPref.dart';
 
 class VmAuthentication with ChangeNotifier {
   String _userName;
@@ -54,8 +54,13 @@ class VmAuthentication with ChangeNotifier {
 
     _highestScore = extractedData['highScore'];
 
-    final firestoreInstance = FirebaseFirestore.instance;
-    final res = await firestoreInstance.collection("users").doc(_userId).get();
+    bool isNet = await checkNetwork();
+    var res;
+    var firestoreInstance;
+    if (isNet) {
+      firestoreInstance = FirebaseFirestore.instance;
+      res = await firestoreInstance.collection("users").doc(_userId).get();
+    }
     if (res.data() != null) {
       var data = res.data();
       var highScore = data['highScore'];
@@ -92,8 +97,13 @@ class VmAuthentication with ChangeNotifier {
     _userId = user.uid;
     notifyListeners();
     try {
-      final res =
-          await firestoreInstance.collection("users").doc(_userId).get();
+      var res;
+      var firestoreInstance;
+      bool isNet = await checkNetwork();
+      if (isNet) {
+        firestoreInstance = FirebaseFirestore.instance;
+        res = await firestoreInstance.collection("users").doc(_userId).get();
+      }
 
       if (res.data() != null) {
         var data = res.data();
@@ -107,7 +117,12 @@ class VmAuthentication with ChangeNotifier {
           "profilePicUrl": _profilePicUrl,
           "highScore": 0
         };
-        await firestoreInstance.collection("users").doc(_userId).set(userData);
+        if (isNet) {
+          await firestoreInstance
+              .collection("users")
+              .doc(_userId)
+              .set(userData);
+        }
         setStringToPref("userData", json.encode(userData));
       }
     } catch (e) {
@@ -118,6 +133,7 @@ class VmAuthentication with ChangeNotifier {
   Future<void> storeNewHighScore(int highScore) async {
     try {
       _highestScore = highScore;
+
       final firestoreInstance = FirebaseFirestore.instance;
 
       Map<String, dynamic> userData = {

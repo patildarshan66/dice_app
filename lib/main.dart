@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:dice_app/home/home.dart';
-import 'package:dice_app/routes.dart';
 import 'package:dice_app/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'additionalFiles/routes.dart';
 import 'authentication/authentication.dart';
 import 'authentication/vm_authentication.dart';
 import 'leaderboard/leaderboard.dart';

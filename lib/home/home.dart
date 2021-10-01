@@ -1,13 +1,15 @@
+import 'dart:async';
+
+import 'package:dice_app/additionalFiles/offline_data_manager.dart';
+import 'package:dice_app/additionalFiles/routes.dart';
 import 'package:dice_app/authentication/vm_authentication.dart';
-import 'package:dice_app/dice/dice_game.dart';
-import 'package:dice_app/routes.dart';
+
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 
-import '../constants.dart';
-import '../global_functions_variables.dart';
-import '../sharedPref.dart';
+import '../additionalFiles/constants.dart';
+import '../additionalFiles/global_functions_variables.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -18,9 +20,24 @@ class _HomeState extends State<Home> {
   int _highestScore = 0;
   String _userName = 'Guest';
   String _profileUrl;
+  bool _isNet = true;
+
+  StreamController<bool> _profilePicController = StreamController.broadcast();
+
+  void getNetStatus() async {
+    _isNet = await checkNetwork();
+    _profilePicController.add(true);
+  }
+
+  @override
+  void dispose() {
+    _profilePicController.close();
+    super.dispose();
+  }
 
   @override
   void initState() {
+    getNetStatus();
     _userName = Provider.of<VmAuthentication>(context, listen: false).username;
     if (_userName == null) {
       _userName = 'Guest';
@@ -40,7 +57,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.all(mediumPadding),
+          padding: const EdgeInsets.all(mediumPadding),
           child: Column(
             children: [
               _getProfileHeader(),
@@ -52,11 +69,19 @@ class _HomeState extends State<Home> {
               ),
               const SizedBox(height: mediumHeightWidth),
               ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    bool isNet = await checkNetwork();
+                    if (!isNet) {
+                      showCustomSnackBar(context,
+                          'You are offline. Please turn on your internet.',
+                          color: Colors.red);
+
+                      return;
+                    }
                     Navigator.pushNamed(context, MyRoutes.diceGame,
                         arguments: _highestScore);
                   },
-                  child: Text('Play'))
+                  child:const Text('Play'))
             ],
           ),
         ),
@@ -80,21 +105,26 @@ class _HomeState extends State<Home> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 2,
-                        color: Colors.white,
+                  StreamBuilder(
+                    stream: _profilePicController.stream,
+                    builder: (ctx, snapshot) => Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 2,
+                          color: Colors.white,
+                        ),
+                        borderRadius: BorderRadius.circular(
+                          5,
+                        ),
                       ),
-                      borderRadius: BorderRadius.circular(
-                        5,
-                      ),
-                    ),
-                    height: 35,
-                    width: 35,
-                    child: Image.network(
-                      _profileUrl,
-                      fit: BoxFit.contain,
+                      height: 35,
+                      width: 35,
+                      child: _isNet
+                          ? Image.network(
+                              _profileUrl,
+                              fit: BoxFit.contain,
+                            )
+                          : Icon(Icons.person),
                     ),
                   ),
                   const SizedBox(width: smallHeightWidth),
@@ -123,12 +153,12 @@ class _HomeState extends State<Home> {
                             child: Stack(
                               alignment: Alignment.center,
                               children: [
-                                Icon(
+                               const  Icon(
                                   Icons.star,
                                   size: 30,
                                   color: Colors.orange,
                                 ),
-                                Text(
+                                const Text(
                                   '65',
                                   style: textStyle,
                                 )
@@ -144,7 +174,7 @@ class _HomeState extends State<Home> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     'Highest Score',
                     style: textStyle,
                   ),

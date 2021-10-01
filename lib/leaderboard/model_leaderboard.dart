@@ -1,15 +1,12 @@
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-ModelLeaderboard modelLeaderboardFromJson(String str) =>
-    ModelLeaderboard.fromJson(json.decode(str));
-
-String modelLeaderboardToJson(ModelLeaderboard data) =>
-    json.encode(data.toJson());
-
-List<ModelLeaderboard> modelLeaderboardFromList(var str) =>
+List<ModelLeaderboard> modelLeaderboardFromListFirestore(var str) =>
     List<ModelLeaderboard>.from(
         str.map((x) => ModelLeaderboard.fromJson(x.data())));
+
+List<ModelLeaderboard> modelLeaderboardFromListOffline(var str) =>
+    List<ModelLeaderboard>.from(str.map((x) => ModelLeaderboard.fromJson(x)));
 
 String modelLeaderboardListToJson(List<ModelLeaderboard> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));

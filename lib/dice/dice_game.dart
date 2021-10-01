@@ -2,14 +2,16 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:dice_app/additionalFiles/offline_data_manager.dart';
+import 'package:dice_app/additionalFiles/routes.dart';
+import 'package:dice_app/additionalFiles/sharedPref.dart';
 import 'package:dice_app/authentication/vm_authentication.dart';
-import 'package:dice_app/constants.dart';
-import 'package:dice_app/sharedPref.dart';
+import 'package:dice_app/additionalFiles/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../global_functions_variables.dart';
-import '../routes.dart';
+import '../additionalFiles/global_functions_variables.dart';
+
 
 class DiceGame extends StatefulWidget {
   final int highestScore;
@@ -94,13 +96,6 @@ class _DiceGameState extends State<DiceGame> with WidgetsBindingObserver {
                     child: Text('Roll a dice'),
                     onPressed: _getDiceResult,
                   ),
-                  // Visibility(
-                  //   visible: _attemptsLeft == 0,
-                  //   child: ElevatedButton(
-                  //     child: Text('Play Again'),
-                  //     onPressed: _playAgain,
-                  //   ),
-                  // ),
                 ],
               ),
             ),
@@ -286,6 +281,14 @@ class _DiceGameState extends State<DiceGame> with WidgetsBindingObserver {
 
   void _storeUserHighestScore() async {
     try {
+      bool isNet = await checkNetwork();
+      if (!isNet) {
+        showCustomSnackBar(
+            context, 'You are offline. Please turn on your internet.',
+            color: Colors.red);
+
+        return;
+      }
       await Provider.of<VmAuthentication>(context, listen: false).storeNewHighScore(
           _currentScore); //stored latest high score in shared for offline use and online
       _showNewHighScoreDialog(isHighScore: true);
@@ -301,8 +304,8 @@ class _DiceGameState extends State<DiceGame> with WidgetsBindingObserver {
       context: context,
       barrierDismissible: false,
       builder: (ctx) => AlertDialog(
-        title: isHighScore
-            ? Text(
+        title: !isHighScore
+            ? const Text(
                 'Game Over',
                 style:
                     TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
@@ -318,12 +321,12 @@ class _DiceGameState extends State<DiceGame> with WidgetsBindingObserver {
                   )
                 ],
               ),
-        content: isHighScore
+        content: !isHighScore
             ? Text(
                 'Score $_currentScore',
                 textAlign: TextAlign.center,
               )
-            : Text('You break your last highest score.'),
+            : const Text('You break your last highest score.'),
         actions: [
           TextButton(
             onPressed: () {
@@ -331,14 +334,14 @@ class _DiceGameState extends State<DiceGame> with WidgetsBindingObserver {
               Navigator.pushReplacementNamed(context, MyRoutes.mainPage,
                   arguments: 1);
             },
-            child: Text('LeaderBoard'),
+            child:const Text('LeaderBoard'),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
               _playAgain();
             },
-            child: Text('Play Again'),
+            child: const Text('Play Again'),
           )
         ],
       ),

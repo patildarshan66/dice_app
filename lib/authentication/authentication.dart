@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:dice_app/additionalFiles/offline_data_manager.dart';
+import 'package:dice_app/additionalFiles/routes.dart';
 import 'package:dice_app/authentication/vm_authentication.dart';
-import 'package:dice_app/constants.dart';
-import 'package:dice_app/global_functions_variables.dart';
-import 'package:dice_app/home/home.dart';
-import 'package:dice_app/routes.dart';
+import 'package:dice_app/additionalFiles/constants.dart';
+import 'package:dice_app/additionalFiles/global_functions_variables.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -45,8 +45,8 @@ class _AuthenticationState extends State<Authentication> {
                   const SizedBox(height: mediumHeightWidth),
                   InkWell(
                     onTap: _isLoading ? null : _authenticate,
-                    child: Image.network(
-                      googlePicUrl,
+                    child: Image.asset(
+                      'assets/google.jpg',
                       height: 60,
                       width: 60,
                     ),
@@ -86,6 +86,13 @@ class _AuthenticationState extends State<Authentication> {
 
   Future<void> _authenticate() async {
     try {
+      bool isNet = await checkNetwork();
+      if (!isNet) {
+        showCustomSnackBar(
+            context, 'You are offline. Please turn on your internet.',
+            color: Colors.red);
+        return;
+      }
       _isLoading = true;
       _loadingController.add(true);
       UserCredential userCredential = await signInWithGoogle();

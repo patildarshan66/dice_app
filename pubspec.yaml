@@ -23,15 +23,31 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  #  used to store data
   shared_preferences:
+
+  #  use for store user info and score in DB
   cloud_firestore:
+
+  # use for user login
   firebase_auth:
+
+  # needed for use firebase packages
   firebase_core:
+
+  #used for store data in device storage
   path_provider:
+
+  #used to show user game level
   percent_indicator:
+  #used for state management
   provider:
+  #used for screen transition
   page_transition:
+  #used for user login using google
   google_sign_in: "^4.5.1"
+  #used for get current app version
   package_info: ^2.0.2
 
 

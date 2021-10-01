@@ -1,8 +1,9 @@
-import 'package:dice_app/constants.dart';
+import 'package:dice_app/additionalFiles/offline_data_manager.dart';
+import 'package:dice_app/additionalFiles/constants.dart';
 import 'package:dice_app/leaderboard/vm_leaderboard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../global_functions_variables.dart';
+import '../additionalFiles/global_functions_variables.dart';
 import 'model_leaderboard.dart';
 
 class Leaderboard extends StatefulWidget {
@@ -65,7 +66,7 @@ class _LeaderboardState extends State<Leaderboard> {
 
   Widget _listItem(ModelLeaderboard obj, int position) {
     return Container(
-      padding: EdgeInsets.all(smallPadding),
+      padding: const EdgeInsets.all(smallPadding),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -135,7 +136,12 @@ class _LeaderboardState extends State<Leaderboard> {
   }
 
   Future<void> _callApi() async {
+    bool isNet = await checkNetwork();
+    if (!isNet) {
+      showCustomSnackBar(
+          context, 'You are offline. Leaderboard may be not updated.',
+          color: Colors.red);
+    }
     Provider.of<VmLeaderboard>(context, listen: false).fetchLeaderboard();
   }
-
 }
