@@ -69,92 +69,97 @@ class _HomeState extends State<Home> {
       color: Colors.blue,
       child: Container(
         padding: const EdgeInsets.all(smallPadding),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 2,
-                      color: Colors.white,
+        child: InkWell(
+          onTap: () {
+            Navigator.pushNamed(context, MyRoutes.profile);
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 2,
+                        color: Colors.white,
+                      ),
+                      borderRadius: BorderRadius.circular(
+                        5,
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(
-                      5,
+                    height: 35,
+                    width: 35,
+                    child: Image.network(
+                      _profileUrl,
+                      fit: BoxFit.contain,
                     ),
                   ),
-                  height: 35,
-                  width: 35,
-                  child: Image.network(
-                    _profileUrl,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                const SizedBox(width: smallHeightWidth),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _userName,
-                      style: textStyle,
-                    ),
-                    const SizedBox(height: 5),
-                    Stack(
-                      clipBehavior: Clip.none,
-                      alignment: Alignment.centerLeft,
-                      children: [
-                        LinearPercentIndicator(
-                          width: 50.0,
-                          lineHeight: 10.0,
-                          percent: 0.65,
-                          linearStrokeCap: LinearStrokeCap.roundAll,
-                          backgroundColor: Colors.blue[900],
-                          progressColor: Colors.orange,
-                        ),
-                        Positioned(
-                          left: -5,
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Icon(
-                                Icons.star,
-                                size: 30,
-                                color: Colors.orange,
-                              ),
-                              Text(
-                                '65',
-                                style: textStyle,
-                              )
-                            ],
+                  const SizedBox(width: smallHeightWidth),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _userName,
+                        style: textStyle,
+                      ),
+                      const SizedBox(height: 5),
+                      Stack(
+                        clipBehavior: Clip.none,
+                        alignment: Alignment.centerLeft,
+                        children: [
+                          LinearPercentIndicator(
+                            width: 50.0,
+                            lineHeight: 10.0,
+                            percent: 0.65,
+                            linearStrokeCap: LinearStrokeCap.roundAll,
+                            backgroundColor: Colors.blue[900],
+                            progressColor: Colors.orange,
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Highest Score',
-                  style: textStyle,
-                ),
-                Text(
-                  _highestScore.toString(),
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.amber,
+                          Positioned(
+                            left: -5,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Icon(
+                                  Icons.star,
+                                  size: 30,
+                                  color: Colors.orange,
+                                ),
+                                Text(
+                                  '65',
+                                  style: textStyle,
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                )
-              ],
-            )
-          ],
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Highest Score',
+                    style: textStyle,
+                  ),
+                  Text(
+                    _highestScore.toString(),
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.amber,
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

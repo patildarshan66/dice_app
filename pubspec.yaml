@@ -32,6 +32,7 @@ dependencies:
   provider:
   page_transition:
   google_sign_in: "^4.5.1"
+  package_info: ^2.0.2
 
 
   # The following adds the Cupertino Icons font to your application.

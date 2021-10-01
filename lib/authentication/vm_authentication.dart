@@ -141,4 +141,14 @@ class VmAuthentication with ChangeNotifier {
       throw e;
     }
   }
+
+  Future<void> logout() async {
+    await removePref('userData');
+    _userName = null;
+    _email = null;
+    _userId = null;
+    _profilePicUrl = null;
+    _highestScore = null;
+    notifyListeners();
+  }
 }
