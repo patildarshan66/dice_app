@@ -8,4 +8,5 @@ This is Dice game, where the Player can press a button to "Roll a dice", and get
 2) Type flutter pub get in terminal and hit enter
 3) Connect your device or satrt emulator
 4) Select device or emulator
-5) Click on run button
+5) For Run project in Dev Mode Type flutter run --flavor diceDev in terminal and hit enter
+6) For Run project in Prod Mode Type flutter run --flavor diceProd in terminal and hit enter

@@ -105,6 +105,7 @@ class _AuthenticationState extends State<Authentication> {
         MyRoutes.mainPage,
       );
     } catch (e) {
+      print(e.toString());
       _isLoading = false;
       _loadingController.add(true);
       showCustomSnackBar(context, "Something went wrong.",
