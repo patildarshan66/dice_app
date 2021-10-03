@@ -6,7 +6,7 @@ This is Dice game, where the Player can press a button to "Roll a dice", and get
 
 1) Open app in android studio or vs code
 2) Type flutter pub get in terminal and hit enter
-3) Connect your device or satrt emulator
+3) Connect your device or start emulator
 4) Select device or emulator
 5) For Run project in Dev Mode Type flutter run --flavor diceDev in terminal and hit enter
 6) For Run project in Prod Mode Type flutter run --flavor diceProd in terminal and hit enter
